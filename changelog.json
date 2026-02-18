@@ -1,4 +1,14 @@
 {
+  "0.1.22": [
+    "Overhauled game detection with 4-layer smart detection engine",
+    "Added window title matching — detects games even with unexpected process names",
+    "Added Steam library auto-scanning — detects ANY installed Steam game via appmanifest files",
+    "Added Unreal Engine / Unity heuristic — catches unknown games by engine process patterns",
+    "Expanded curated game database to 200+ titles including ARC Raiders, Monster Hunter Wilds, Marvel Rivals, Silent Hill 2, Avowed, and many more",
+    "Intelligent process filtering — ignores 50+ known system/launcher/browser processes",
+    "Reduced detection poll interval from 15s to 10s for faster game pickup",
+    "Steam library cache with 5-minute TTL to avoid repeated disk scans"
+  ],
   "0.1.21": [
     "Installer now auto-closes running RecoilApp before updating — no more stuck 'Retry' dialog",
     "Uninstaller also force-closes RecoilApp before removing files"
