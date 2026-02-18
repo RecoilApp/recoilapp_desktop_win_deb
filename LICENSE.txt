@@ -18,11 +18,11 @@ others who access or use the Service.
 
 2. DESCRIPTION OF SERVICE
 
-RecoilApp is a self-hosted, real-time messaging platform that enables users to
+RecoilApp is a real-time messaging platform that enables users to
 create servers (communities), organize communication into channels, exchange
 direct messages, manage roles and permissions, and interact through threads,
-reactions, custom emojis, and scheduled events. The Service is provided free of
-charge and is maintained by the RecoilApp team.
+reactions, custom emojis, and scheduled events. The Service is maintained by the
+RecoilApp team.
 
 3. USER ACCOUNTS
 
@@ -124,7 +124,7 @@ Last updated: February 11, 2026
 RecoilApp ("we", "us", "our") is committed to protecting your privacy. This
 Privacy Policy explains what information we collect, how we use it, and what
 choices you have regarding your data when you use RecoilApp ("the Service").
-RecoilApp is a self-hosted platform operated by the RecoilApp team.
+RecoilApp is a platform operated by the RecoilApp team.
 
 2. INFORMATION WE COLLECT
 
@@ -173,7 +173,7 @@ protection including:
 
 We do not sell, rent, or trade your personal data to third parties — ever.
 
-RecoilApp is self-hosted and does not use third-party analytics, advertising
+RecoilApp does not use third-party analytics, advertising
 networks, or data brokers. Your data is stored on infrastructure controlled by
 the platform administrator and is never shared with external parties except as
 required by law.
