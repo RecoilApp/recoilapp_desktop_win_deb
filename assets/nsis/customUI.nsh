@@ -38,3 +38,19 @@
 !ifndef MUI_UNFINISHPAGE_NOAUTOCLOSE
   !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !endif
+
+; ============================================================
+; Force-close running RecoilApp before install/update
+; ============================================================
+!macro customInit
+  ; Kill any running RecoilApp process so the installer doesn't hang
+  nsExec::ExecToLog 'taskkill /F /IM "RecoilApp.exe"'
+  ; Brief delay to let the process fully exit
+  Sleep 1000
+!macroend
+
+!macro customUnInit
+  ; Kill any running RecoilApp process before uninstall
+  nsExec::ExecToLog 'taskkill /F /IM "RecoilApp.exe"'
+  Sleep 1000
+!macroend

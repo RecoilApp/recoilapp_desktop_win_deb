@@ -1,4 +1,8 @@
 {
+  "0.1.21": [
+    "Installer now auto-closes running RecoilApp before updating — no more stuck 'Retry' dialog",
+    "Uninstaller also force-closes RecoilApp before removing files"
+  ],
   "0.1.20": [
     "Fixed crash on startup — game-detector module was missing from packaged build",
     "Game detection now loads gracefully and won't crash the app if unavailable"
