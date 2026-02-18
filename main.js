@@ -21,6 +21,15 @@ try {
 let mainWindow = null;
 let tray = null;
 
+// ── Game Detection ─────────────────────────────────────────
+let gameDetector = null;
+try {
+  const { GameDetector } = require('./game-detector');
+  gameDetector = new GameDetector();
+} catch (err) {
+  console.error('Failed to load game-detector module:', err.message);
+}
+
 // ── Settings Persistence ───────────────────────────────────
 const SETTINGS_FILE = path.join(app.getPath('userData'), 'desktop-settings.json');
 const DEFAULT_KEYBINDS = {
@@ -324,6 +333,40 @@ function registerIPC() {
     saveSettings(desktopSettings);
     Menu.setApplicationMenu(buildAppMenu());
     return { success: true, keybinds: desktopSettings.keybinds };
+  });
+
+  // ── Game Detection IPC ─────────────────────────────────
+  ipcMain.handle('get-game-list', () => gameDetector ? gameDetector.getGameList() : []);
+
+  ipcMain.handle('get-detected-game', () => gameDetector ? gameDetector.getCurrentGame() : null);
+
+  ipcMain.handle('start-game-detection', () => {
+    if (!gameDetector) return { success: false, error: 'Game detection unavailable' };
+    gameDetector.start(
+      (game) => {
+        // Send game detected event to renderer
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.webContents.send('game-detected', game);
+        }
+      },
+      () => {
+        // Send game exited event to renderer
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.webContents.send('game-exited');
+        }
+      }
+    );
+    return { success: true };
+  });
+
+  ipcMain.handle('stop-game-detection', () => {
+    if (gameDetector) gameDetector.stop();
+    return { success: true };
+  });
+
+  ipcMain.handle('set-game-detection-enabled', (event, enabled) => {
+    if (gameDetector) gameDetector.setEnabled(enabled);
+    return { success: true };
   });
 }
 

@@ -47,4 +47,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('update-status', (event, data) => callback(data));
     return () => ipcRenderer.removeAllListeners('update-status');
   },
+
+  // Game Detection
+  getGameList: () => ipcRenderer.invoke('get-game-list'),
+  getDetectedGame: () => ipcRenderer.invoke('get-detected-game'),
+  startGameDetection: () => ipcRenderer.invoke('start-game-detection'),
+  stopGameDetection: () => ipcRenderer.invoke('stop-game-detection'),
+  setGameDetectionEnabled: (enabled) => ipcRenderer.invoke('set-game-detection-enabled', enabled),
+  onGameDetected: (callback) => {
+    ipcRenderer.on('game-detected', (event, game) => callback(game));
+    return () => ipcRenderer.removeAllListeners('game-detected');
+  },
+  onGameExited: (callback) => {
+    ipcRenderer.on('game-exited', () => callback());
+    return () => ipcRenderer.removeAllListeners('game-exited');
+  },
 });

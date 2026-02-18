@@ -1,4 +1,26 @@
 {
+  "0.1.20": [
+    "Fixed crash on startup — game-detector module was missing from packaged build",
+    "Game detection now loads gracefully and won't crash the app if unavailable"
+  ],
+  "0.1.19": [
+    "Game Activity Detection — automatically detects 200+ popular games and shows what you're playing",
+    "Activity settings panel with Auto (game detection) and Custom activity modes",
+    "Custom activity persists across sessions — your custom status is restored on login",
+    "Detects streaming (OBS, Streamlabs) and listening (Spotify) apps in addition to games"
+  ],
+  "0.1.18": [
+    "Fixed E2EE messages showing as 'Encrypted message' after page reload — keys now properly decrypt queued messages once loaded",
+    "DM notification bubbles now persist across page refreshes",
+    "Starting a DM with a friend now immediately shows the conversation in the sidebar"
+  ],
+  "0.1.17": [
+    "Added multi-file upload support — attach up to 10 files per message with drag & drop, paste, or file picker",
+    "Multiple image attachments display in a responsive grid layout",
+    "Custom status now expands with text instead of truncating in profile cards",
+    "Premium plan limits fully enforced: channels, roles, emojis, webhooks, pins, file size, friend categories, group DM size, custom invites, audit log retention, and more",
+    "Plan-aware file size limits: Free 10MB, Premium 50MB, Premium+ 100MB per file"
+  ],
   "0.1.16": [
     "Added Discord-style message search with Ctrl+F shortcut and 12 filter types",
     "Added emoji picker button in the message input bar",
