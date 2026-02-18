@@ -1,0 +1,83 @@
+{
+  "0.1.16": [
+    "Added Discord-style message search with Ctrl+F shortcut and 12 filter types",
+    "Added emoji picker button in the message input bar",
+    "Search supports from:, has:, before:, after:, pinned: and more filters",
+    "Search results show message previews with avatars and timestamps"
+  ],
+  "0.1.15": [
+    "Added customizable keyboard shortcuts (Settings → Desktop App → Keyboard Shortcuts)",
+    "Ctrl+L instantly locks the app when a PIN or password is configured",
+    "Ctrl+Shift+M toggles microphone mute from anywhere in the app",
+    "Ctrl+Shift+D toggles audio deafen from anywhere in the app",
+    "Keybinds can be changed, cleared, or reset to defaults in Desktop Settings",
+    "System and conflicting shortcuts are automatically blocked when recording"
+  ],
+  "0.1.14": [
+    "Fixed menu bar appearing when pressing ALT key",
+    "Images now open in a fullscreen lightbox inside the app instead of a new window",
+    "Lightbox supports zoom (scroll/+/-), rotate (R), download, and open in browser",
+    "Blocked all same-domain popup windows — everything stays in the main app"
+  ],
+  "0.1.13": [
+    "Fixed file downloads not saving when clicking Save in the dialog",
+    "Downloads now show a native Save As dialog with the correct filename",
+    "Taskbar flashes when a download completes in the background"
+  ],
+  "0.1.12": [
+    "Fixed chat flashing/wiggling when sending messages",
+    "Added back button and Escape key support to Premium page",
+    "Fixed Check for Updates button getting stuck on Checking"
+  ],
+  "0.0.10": [
+    "Update dialog now shows a list of changes (What's New)",
+    "Added Release Notes section in Desktop App settings",
+    "You can now see changes for every version at a glance"
+  ],
+  "0.0.9": [
+    "CSS docs page now opens in the same window instead of a new tab",
+    "Fixed scrolling on the CSS documentation page",
+    "Mention system now works in DMs and group DMs",
+    "Added #channel mentions with autocomplete in servers",
+    "Fixed typing indicator causing message input to jitter"
+  ],
+  "0.0.8": [
+    "Download page now only shows the latest version per platform",
+    "Added version number display on the download page",
+    "Custom CSS documentation page with ready-to-use examples",
+    "Added CSS Guide button in Appearance settings"
+  ],
+  "0.0.7": [
+    "App lock with PIN or password protection on startup",
+    "System tray minimize and close-to-tray support",
+    "Auto-update system with themed progress dialog",
+    "Hardware acceleration toggle"
+  ],
+  "0.0.6": [
+    "Added a new download page with separate links for each platform",
+    "Added a changelog page to show changes in each version",
+    "Added a feedback form to collect user suggestions and bug reports"
+  ],
+  "0.0.5": [
+    "Added a new settings page with options for themes, notifications, and more",
+    "Added support for custom themes and plugins",
+    "Improved performance and fixed various bugs"
+  ],
+  "0.0.4": [
+    "Added a new user interface with a modern design",
+    "Added a new chat system with support for threads and reactions"
+  ],
+  "0.0.3": [
+    "Initial release with basic features and functionality",
+    "Built with Electron and React"
+  ],
+  "0.0.2": [
+    "Added support for notifications and system tray",
+    "Improved performance and fixed various bugs",
+    "Added a new settings page with options for themes and more"
+  ],
+  "0.0.1": [
+    "Initial development version with basic features and functionality",
+    "Built with Electron and React"
+  ]
+}

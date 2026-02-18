@@ -1,0 +1,215 @@
+RECOILAPP — TERMS OF SERVICE & PRIVACY POLICY
+================================================
+
+By installing RecoilApp Desktop, you agree to the following Terms of Service
+and Privacy Policy.
+
+
+TERMS OF SERVICE
+================
+Last updated: February 11, 2026
+
+1. ACCEPTANCE OF TERMS
+
+By accessing or using RecoilApp ("the Service"), you agree to be bound by
+these Terms of Service ("Terms"). If you do not agree to these Terms, you may
+not access or use the Service. These Terms apply to all visitors, users, and
+others who access or use the Service.
+
+2. DESCRIPTION OF SERVICE
+
+RecoilApp is a self-hosted, real-time messaging platform that enables users to
+create servers (communities), organize communication into channels, exchange
+direct messages, manage roles and permissions, and interact through threads,
+reactions, custom emojis, and scheduled events. The Service is provided free of
+charge and is maintained by the RecoilApp team.
+
+3. USER ACCOUNTS
+
+- You must provide a valid email address and create a unique username to
+  register.
+- You are responsible for maintaining the confidentiality of your account
+  credentials.
+- You must be at least 13 years of age to use the Service.
+- You are responsible for all activity that occurs under your account.
+- We reserve the right to suspend or terminate accounts that violate these
+  Terms.
+
+4. ACCEPTABLE USE
+
+You agree not to use the Service to:
+
+- Violate any applicable local, national, or international law or regulation.
+- Transmit any content that is unlawful, harmful, threatening, abusive,
+  harassing, defamatory, vulgar, obscene, or otherwise objectionable.
+- Impersonate any person or entity, or falsely claim an affiliation with any
+  person or entity.
+- Upload or transmit viruses, malware, or any other malicious code.
+- Attempt to gain unauthorized access to other accounts, servers, or systems.
+- Interfere with or disrupt the Service or servers or networks connected to the
+  Service.
+- Harass, bully, stalk, or intimidate other users.
+- Distribute spam, unsolicited messages, or promotional material.
+- Share content that exploits or harms minors in any way.
+
+5. USER CONTENT
+
+You retain ownership of any content you submit, post, or display on or through
+the Service ("User Content"). By posting User Content, you grant RecoilApp a
+non-exclusive, royalty-free license to store, display, and transmit that content
+solely for the purpose of operating the Service. You are solely responsible for
+all User Content you upload to the Service.
+
+6. SERVER MODERATION
+
+Server owners and designated moderators are responsible for enforcing community
+standards within their servers. RecoilApp provides tools including role-based
+permissions, bans, kicks, and audit logging to support moderation. RecoilApp is
+not responsible for the content or moderation decisions made within individual
+servers.
+
+7. SECURITY
+
+We implement industry-standard security measures including encrypted data
+transmission (TLS), hashed password storage (bcrypt), TOTP-based two-factor
+authentication, rate limiting, input sanitization, and security headers (HSTS,
+CSP, X-Frame-Options). While we strive to protect your data, no method of
+electronic transmission or storage is 100% secure.
+
+8. INTELLECTUAL PROPERTY
+
+The Service and its original content (excluding User Content), features, and
+functionality are and will remain the exclusive property of RecoilApp and
+the RecoilApp team. The Service is protected by copyright, trademark, and other laws. Our
+trademarks may not be used without prior written consent.
+
+9. TERMINATION
+
+We reserve the right to suspend or terminate your access to the Service at any
+time, without prior notice or liability, for any reason, including but not
+limited to a breach of these Terms. Upon termination, your right to use the
+Service will immediately cease. You may delete your account at any time through
+your account settings.
+
+10. DISCLAIMER OF WARRANTIES
+
+The Service is provided on an "AS IS" and "AS AVAILABLE" basis without
+warranties of any kind, whether express or implied, including but not limited
+to implied warranties of merchantability, fitness for a particular purpose,
+non-infringement, or course of performance. RecoilApp does not warrant that the
+Service will be uninterrupted, secure, or error-free.
+
+11. LIMITATION OF LIABILITY
+
+In no event shall RecoilApp, its developers, or contributors be liable for any
+indirect, incidental, special, consequential, or punitive damages, including
+without limitation, loss of profits, data, use, or goodwill, arising out of or
+in connection with your use of the Service.
+
+12. CHANGES TO TERMS
+
+We reserve the right to modify or replace these Terms at any time. If a
+revision is material, we will provide at least 30 days' notice prior to any new
+terms taking effect. What constitutes a material change will be determined at
+our sole discretion. Continued use of the Service after changes become
+effective constitutes acceptance of the revised Terms.
+
+
+PRIVACY POLICY
+==============
+Last updated: February 11, 2026
+
+1. INTRODUCTION
+
+RecoilApp ("we", "us", "our") is committed to protecting your privacy. This
+Privacy Policy explains what information we collect, how we use it, and what
+choices you have regarding your data when you use RecoilApp ("the Service").
+RecoilApp is a self-hosted platform operated by the RecoilApp team.
+
+2. INFORMATION WE COLLECT
+
+2.1 Information You Provide
+- Account Data: Username, email address, and password (stored as a bcrypt
+  hash — we never store plain-text passwords).
+- Profile Data: Display name, avatar image, banner image, custom status, bio,
+  and accent color — all optional.
+- Messages: Text content, file attachments, reactions, and thread replies you
+  send through the Service.
+- Server Data: Servers you create or join, channels, roles, and community
+  settings.
+
+2.2 Information Collected Automatically
+- Presence Data: Online/offline/idle/DND status for real-time presence
+  features.
+- Session Tokens: JWT access tokens (15-minute expiry) and refresh tokens
+  (7-day expiry) for authentication.
+- Timestamps: Account creation date, message timestamps, and last online time.
+
+3. HOW WE USE YOUR INFORMATION
+
+We use the information we collect solely to:
+- Operate and maintain the Service (deliver messages, manage servers,
+  authenticate users).
+- Provide real-time features (typing indicators, presence tracking,
+  notifications).
+- Enforce community standards and moderate content (audit logs, ban records).
+- Send transactional emails (email verification, password resets) — no
+  marketing emails.
+- Improve security (rate limiting, login monitoring, two-factor
+  authentication).
+
+4. DATA SECURITY
+
+We take the security of your data seriously and implement multiple layers of
+protection including:
+- Encryption in Transit (TLS)
+- Password Security (bcrypt hashing)
+- Two-Factor Authentication (TOTP-based MFA)
+- Security Headers (HSTS, CSP, X-Frame-Options)
+- Rate Limiting
+- Input Sanitization (XSS, SQL injection, HPP prevention)
+
+5. DATA SHARING
+
+We do not sell, rent, or trade your personal data to third parties — ever.
+
+RecoilApp is self-hosted and does not use third-party analytics, advertising
+networks, or data brokers. Your data is stored on infrastructure controlled by
+the platform administrator and is never shared with external parties except as
+required by law.
+
+6. DATA RETENTION
+
+- Messages: Stored as long as the server/channel exists.
+- Account Data: Retained until you delete your account. Upon deletion, your
+  data is permanently removed.
+- Session Tokens: Access tokens expire after 15 minutes. Refresh tokens expire
+  after 7 days.
+- File Uploads: Removed when the associated content is deleted.
+
+7. COOKIES & LOCAL STORAGE
+
+RecoilApp uses browser localStorage to store authentication tokens and user
+preferences. We do not use tracking cookies, third-party cookies, or any
+cross-site tracking technologies.
+
+8. CHILDREN'S PRIVACY
+
+The Service is not intended for use by anyone under the age of 13. We do not
+knowingly collect personal information from children under 13.
+
+9. YOUR RIGHTS
+
+You have the right to:
+- Access: Request a copy of the personal data we hold about you.
+- Rectification: Update or correct your personal information.
+- Deletion: Delete your account and all associated data at any time.
+- Portability: Request your data in a portable format.
+
+10. CONTACT
+
+If you have any questions about these Terms or Privacy Policy, please contact
+us through the RecoilApp platform or reach out to the platform administrator.
+
+
+Copyright (c) 2026 RecoilApp. All rights reserved.

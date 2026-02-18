@@ -1,0 +1,94 @@
+{
+  "name": "recoilapp-desktop",
+  "version": "0.1.16",
+  "description": "RecoilApp Desktop — Real-Time Messaging Platform",
+  "homepage": "https://recoilapp.com",
+  "main": "main.js",
+  "author": {
+    "name": "NNKtv28",
+    "email": "contact@recoilapp.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build:linux": "electron-builder --linux",
+    "build:windows": "electron-builder --win",
+    "build:all": "electron-builder --linux --win",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.recoilapp.desktop",
+    "productName": "RecoilApp",
+    "directories": {
+      "output": "../compiled_applications"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "tray.js",
+      "updater.js",
+      "updater-ui.js",
+      "changelog.json",
+      "assets/**/*",
+      "LICENSE.txt"
+    ],
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Network;Chat;InstantMessaging",
+      "icon": "assets/icons",
+      "desktop": {
+        "Name": "RecoilApp",
+        "Comment": "Real-Time Messaging Platform",
+        "Keywords": "chat;messaging;recoil;community"
+      }
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icons/icon.ico",
+      "uninstallerIcon": "assets/icons/icon.ico",
+      "installerHeaderIcon": "assets/icons/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "RecoilApp",
+      "license": "LICENSE.txt",
+      "installerSidebar": "assets/nsis/installerSidebar.bmp",
+      "uninstallerSidebar": "assets/nsis/uninstallerSidebar.bmp",
+      "include": "assets/nsis/customUI.nsh"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://recoilapp.com/updates/"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.7"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  }
+}
