@@ -1,4 +1,44 @@
 {
+  "0.1.37": [
+    "Added Email Login Verification section to Account settings — shows verification status and explains email codes vs 2FA",
+    "Added Change Email feature to Account settings — update your email with password confirmation and automatic re-verification",
+    "Added User ID display in Account Info section",
+    "Enabled Animate Emoji, Sticker Suggestions, Email Digest, and Voice Activity Detection settings — previously Coming Soon",
+    "Enabled Light theme support — system theme preference now resolves correctly",
+    "Updated release notes with entries for versions 0.1.33 through 0.1.36",
+    "Fixed path traversal vulnerability in attachment download endpoint",
+    "Added admin middleware guard to supporter admin routes"
+  ],
+  "0.1.36": [
+    "Email verification codes are now required when logging in without 2FA enabled",
+    "6-digit verification code sent to your email on every login for added security",
+    "30-second cooldown on resend to prevent spam",
+    "Codes expire after 10 minutes for safety"
+  ],
+  "0.1.35": [
+    "Fixed Stripe checkout flow — purchases now redirect properly to the payment page",
+    "Supporter page max server slots increased to 2000",
+    "Strengthened Content Security Policy headers for Stripe integration",
+    "Release notes and settings polish"
+  ],
+  "0.1.34": [
+    "LEO investigation system — law enforcement portal for authorized evidence collection",
+    "Supporter page scroll and layout improvements",
+    "Fixed LEO evidence collection query for relationships"
+  ],
+  "0.1.33": [
+    "System announcements feature — server-wide broadcast messages from administrators",
+    "Desktop notification support for system announcements",
+    "Announcements display in a dismissible banner across all clients"
+  ],
+  "0.1.32": [
+    "Accepting a friend request now automatically creates a DM conversation that appears at the top of the DM list"
+  ],
+  "0.1.31": [
+    "Real-time sync between web and desktop — friend requests, accepts, blocks, and removals now update instantly on all connected clients",
+    "Added pending friend request notification badge on the Friends button in the DM sidebar",
+    "Added pending count badge on the Pending tab in the Friends list"
+  ],
   "0.1.30": [
     "Removed the gray menu bar that appeared when pressing Alt on Windows and Linux",
     "Fixed About dialog — now shows version, platform, and copyright info reliably",
