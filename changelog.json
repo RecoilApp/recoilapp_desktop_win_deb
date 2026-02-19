@@ -1,4 +1,8 @@
 {
+  "0.1.29": [
+    "Fixed white/light background rendering issue — disabled unfinished light theme that caused washed-out UI",
+    "System theme preference now always resolves to dark mode until light theme is production-ready"
+  ],
   "0.1.28": [
     "Replaced E2EE encryption protocol — now uses server-managed symmetric keys instead of ECDH",
     "Fixed 'Encrypted message' errors on Android and after browser cache clears",
