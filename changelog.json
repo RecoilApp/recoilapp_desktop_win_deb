@@ -1,4 +1,10 @@
 {
+  "0.1.28": [
+    "Replaced E2EE encryption protocol — now uses server-managed symmetric keys instead of ECDH",
+    "Fixed 'Encrypted message' errors on Android and after browser cache clears",
+    "Encryption keys are now always available — no more key loss on device changes",
+    "Migrated all existing encrypted messages to the new protocol"
+  ],
   "0.1.27": [
     "Fixed reply quotes showing raw encrypted payload instead of decrypted content in E2EE conversations",
     "Reply quotes now correctly decrypt reply_to_content for both DMs and channel messages",
