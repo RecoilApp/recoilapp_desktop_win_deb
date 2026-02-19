@@ -1,4 +1,27 @@
 {
+  "0.1.27": [
+    "Fixed reply quotes showing raw encrypted payload instead of decrypted content in E2EE conversations",
+    "Reply quotes now correctly decrypt reply_to_content for both DMs and channel messages",
+    "Editing a message now updates the reply quote content in real-time for all messages referencing it",
+    "Reply quotes now show 'Original message was deleted' when the parent message no longer exists"
+  ],
+  "0.1.26": [
+    "E2EE is now always enabled for DMs — messages are always encrypted, the disable option has been removed",
+    "Fixed messages reverting to 'Message Encrypted' — decryption now works reliably using ECDH key derivation without requiring an explicit 'enabled' flag",
+    "Fixed system announcements not appearing without a page refresh — announcements now appear instantly in chat",
+    "Fixed announcement notification badge not showing in the DM sidebar",
+    "Fixed announcement messages showing blank — the correct message object is now passed to the chat renderer"
+  ],
+  "0.1.25": [
+    "Added end-to-end encryption (E2EE) for direct messages — all DM messages are now encrypted with keys stored only on your device",
+    "E2EE uses elliptic curve Diffie-Hellman (ECDH) for secure key exchange and AES-256-GCM for message encryption",
+    "DM messages are encrypted before sending and decrypted on receipt — the server only sees ciphertext"
+  ],
+  "0.1.24": [
+    "Fixed bot member list not updating in real-time when a bot joins or leaves a server",
+    "Fixed system announcement messages showing empty content — title and body now display correctly",
+    "Added markdown formatting support in messages — bold, italic, strikethrough, and underline"
+  ],
   "0.1.22": [
     "Overhauled game detection with 4-layer smart detection engine",
     "Added window title matching — detects games even with unexpected process names",
