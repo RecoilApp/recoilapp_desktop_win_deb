@@ -383,7 +383,7 @@ function createWindow() {
     title: APP_NAME,
     icon: iconPath,
     frame: true,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     backgroundColor: '#090C10',
     show: false,
     webPreferences: {
@@ -395,10 +395,17 @@ function createWindow() {
     },
   });
 
-  // Hide the menu bar entirely — no ALT toggle, no visible bar
-  // Keep the menu registered for keyboard shortcuts (Ctrl+Q, Ctrl+R, etc.)
+  // Hide the menu bar entirely — no ALT toggle, no visible gray bar
+  // Keep the menu registered at the application level for keyboard shortcuts
   mainWindow.setMenuBarVisibility(false);
-  mainWindow.setAutoHideMenuBar(true);
+
+  // Intercept Alt key presses to prevent the menu bar from appearing
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'Alt' && !input.control && !input.meta && !input.shift) {
+      // Prevent Alt from toggling the menu bar visibility
+      mainWindow.setMenuBarVisibility(false);
+    }
+  });
   Menu.setApplicationMenu(buildAppMenu());
   mainWindow.loadURL(APP_URL);
 
@@ -594,7 +601,19 @@ function buildAppMenu() {
     {
       label: APP_NAME,
       submenu: [
-        { role: 'about' },
+        {
+          label: 'About RecoilApp',
+          click: () => {
+            dialog.showMessageBox(mainWindow, {
+              type: 'info',
+              title: 'About RecoilApp',
+              message: 'RecoilApp',
+              detail: `Version ${app.getVersion()}\nElectron ${process.versions.electron}\nChromium ${process.versions.chrome}\nNode.js ${process.versions.node}\nPlatform: ${process.platform} ${process.arch}\n\nA real-time messaging platform for communities and teams.\n\n© 2025-2026 RecoilApp. All rights reserved.`,
+              buttons: ['OK'],
+              icon: nativeImage.createFromPath(getIconPath()),
+            });
+          },
+        },
         { type: 'separator' },
         {
           label: 'Check for Updates\u2026',

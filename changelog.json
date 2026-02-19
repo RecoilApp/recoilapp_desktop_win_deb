@@ -1,4 +1,9 @@
 {
+  "0.1.30": [
+    "Removed the gray menu bar that appeared when pressing Alt on Windows and Linux",
+    "Fixed About dialog — now shows version, platform, and copyright info reliably",
+    "Removed non-functional Credits and License entries from the app menu"
+  ],
   "0.1.29": [
     "Fixed white/light background rendering issue — disabled unfinished light theme that caused washed-out UI",
     "System theme preference now always resolves to dark mode until light theme is production-ready"
