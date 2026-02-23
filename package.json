@@ -1,6 +1,6 @@
 {
   "name": "recoilapp-desktop",
-  "version": "0.1.37",
+  "version": "0.1.41",
   "description": "RecoilApp Desktop — Real-Time Messaging Platform",
   "homepage": "https://recoilapp.com",
   "main": "main.js",

@@ -2,6 +2,9 @@ const { app, BrowserWindow, Menu, Tray, shell, nativeImage, session, dialog, ipc
 const path = require('path');
 const fs = require('fs');
 
+// ── Windows notification identity ──────────────────────────
+app.setAppUserModelId('com.recoilapp.desktop');
+
 // ── Configuration ──────────────────────────────────────────
 const APP_URL = 'https://chat.recoilapp.com';
 const APP_DOMAIN = 'recoilapp.com';

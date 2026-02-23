@@ -1,4 +1,26 @@
 {
+  "0.1.41": [
+    "Fixed Windows notifications showing 'electron.app.RecoilApp' — now correctly shows 'RecoilApp'",
+    "Added swipe-to-reply gesture on mobile — swipe left on any message to reply",
+    "Improved Android notification delivery when viewing other channels"
+  ],
+  "0.1.40": [
+    "Fixed channel permission overrides not being enforced — role-based channel restrictions now actually take effect",
+    "Fixed socket listener leak caused by duplicate member_join event registration",
+    "Fixed DM unread badge not clearing after reading messages sent via socket",
+    "Security: channel-level permission checks now applied to message sending, pinning, and reactions"
+  ],
+  "0.1.39": [
+    "Currency is now automatically detected from your location — no manual selection needed",
+    "Removed currency selector dropdown for a cleaner Premium and Supporter page",
+    "Server-side IP-based geolocation for more accurate currency detection"
+  ],
+  "0.1.38": [
+    "Multi-currency pricing — prices on Premium and Supporter pages now automatically convert to your local currency",
+    "Currency selector dropdown on Premium and Supporter pages — choose from 29 supported currencies",
+    "Auto-detection of preferred currency from browser locale",
+    "Stripe checkout sessions now open in your selected currency"
+  ],
   "0.1.37": [
     "Added Email Login Verification section to Account settings — shows verification status and explains email codes vs 2FA",
     "Added Change Email feature to Account settings — update your email with password confirmation and automatic re-verification",
