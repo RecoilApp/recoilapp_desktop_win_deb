@@ -1,4 +1,10 @@
 {
+  "0.1.42": [
+    "Fixed broken video preview thumbnail when selecting a video before sending",
+    "Video thumbnails now show a proper frame capture with play icon overlay",
+    "Desktop videos now resize to their natural width instead of stretching full-width",
+    "Mobile input area cleaned up — character counter hidden when empty, tighter spacing"
+  ],
   "0.1.41": [
     "Fixed Windows notifications showing 'electron.app.RecoilApp' — now correctly shows 'RecoilApp'",
     "Added swipe-to-reply gesture on mobile — swipe left on any message to reply",
