@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, nativeImage, session, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, Tray, shell, nativeImage, session, dialog, ipcMain, desktopCapturer, systemPreferences, clipboard } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -371,6 +371,37 @@ function registerIPC() {
     if (gameDetector) gameDetector.setEnabled(enabled);
     return { success: true };
   });
+
+  // ── Spellcheck ───────────────────────────────────────────
+  ipcMain.handle('replace-misspelling', (event, word) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.replaceMisspelling(word);
+    }
+  });
+
+  ipcMain.handle('add-to-dictionary', (event, word) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.session.addWordToSpellCheckerDictionary(word);
+    }
+    return { success: true };
+  });
+
+  // ── Copy image to clipboard via native Electron API ─────
+  ipcMain.handle('copy-image-to-clipboard', async (event, imageUrl) => {
+    try {
+      const { net } = require('electron');
+      const response = await net.fetch(imageUrl);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      const image = nativeImage.createFromBuffer(buffer);
+      if (image.isEmpty()) {
+        return { success: false, error: 'Failed to decode image' };
+      }
+      clipboard.writeImage(image);
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  });
 }
 
 // ── Create Main Window ─────────────────────────────────────
@@ -411,6 +442,17 @@ function createWindow() {
   });
   Menu.setApplicationMenu(buildAppMenu());
   mainWindow.loadURL(APP_URL);
+
+  // ── Spellcheck context-menu capture ──────────────────────
+  mainWindow.webContents.on('context-menu', (event, params) => {
+    event.preventDefault();
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('context-menu-params', {
+        misspelledWord: params.misspelledWord || '',
+        suggestions: params.dictionarySuggestions || [],
+      });
+    }
+  });
 
   let windowShown = false;
   const showWindow = () => {
@@ -690,6 +732,210 @@ function getIconPath() {
 app.whenReady().then(() => {
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({ responseHeaders: details.responseHeaders });
+  });
+
+  // ── Screen Share / Display Media Handler ──────────────────
+  // Electron requires explicit handling for getDisplayMedia().
+  // Shows a beautiful in-app source picker with thumbnails.
+  session.defaultSession.setDisplayMediaRequestHandler(async (request, callback) => {
+    try {
+      const sources = await desktopCapturer.getSources({
+        types: ['screen', 'window'],
+        thumbnailSize: { width: 320, height: 180 },
+        fetchWindowIcons: true,
+      });
+
+      if (!sources || sources.length === 0) {
+        callback({});
+        return;
+      }
+
+      // If only one screen and no windows, auto-select it
+      if (sources.length === 1 && sources[0].id.startsWith('screen:')) {
+        callback({ video: sources[0], audio: 'loopback' });
+        return;
+      }
+
+      // Build source data for the renderer picker
+      const sourceData = sources.map(s => ({
+        id: s.id,
+        name: s.name || 'Unknown',
+        thumbnail: s.thumbnail.toDataURL(),
+        appIcon: s.appIcon ? s.appIcon.toDataURL() : null,
+        isScreen: s.id.startsWith('screen:'),
+      }));
+
+      // Inject a beautiful screen picker overlay into the renderer
+      const selectedId = await mainWindow.webContents.executeJavaScript(`
+        new Promise((resolve) => {
+          // Remove any existing picker
+          const existingPicker = document.getElementById('recoil-screen-picker');
+          if (existingPicker) existingPicker.remove();
+
+          const sources = ${JSON.stringify(sourceData)};
+          const screens = sources.filter(s => s.isScreen);
+          const windows = sources.filter(s => !s.isScreen);
+
+          // Create overlay
+          const overlay = document.createElement('div');
+          overlay.id = 'recoil-screen-picker';
+          overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);animation:recoilPickerFadeIn 0.2s ease;';
+
+          // Add animation styles
+          const style = document.createElement('style');
+          style.textContent = \`
+            @keyframes recoilPickerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes recoilPickerSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+            .recoil-picker-card { border: 2px solid #1E293B; background: #111820; border-radius: 12px; cursor: pointer; transition: all 0.15s ease; overflow: hidden; position: relative; }
+            .recoil-picker-card:hover { border-color: #00bfbf; transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,191,191,0.15); }
+            .recoil-picker-card:active { transform: translateY(0); }
+            .recoil-picker-card img { width: 100%; height: 140px; object-fit: cover; display: block; background: #090C10; }
+            .recoil-picker-card .label { padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
+            .recoil-picker-card .label span { font-size: 13px; font-weight: 500; color: #E2E8F0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .recoil-picker-card .label img.icon { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; }
+            .recoil-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #64748B; margin-bottom: 10px; }
+            .recoil-picker-scrollarea { max-height: 60vh; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: #222C3D transparent; }
+            .recoil-picker-scrollarea::-webkit-scrollbar { width: 6px; }
+            .recoil-picker-scrollarea::-webkit-scrollbar-track { background: transparent; }
+            .recoil-picker-scrollarea::-webkit-scrollbar-thumb { background: #222C3D; border-radius: 3px; }
+          \`;
+          document.head.appendChild(style);
+
+          // Create modal
+          const modal = document.createElement('div');
+          modal.style.cssText = 'background:#0D1117;border:1px solid #1E293B;border-radius:16px;padding:24px;min-width:480px;max-width:720px;width:90%;box-shadow:0 24px 48px rgba(0,0,0,0.5);animation:recoilPickerSlideUp 0.25s ease;';
+
+          // Header
+          const header = document.createElement('div');
+          header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;';
+          header.innerHTML = \`
+            <div>
+              <h2 style="margin:0;font-size:18px;font-weight:700;color:#E2E8F0;">Share Your Screen</h2>
+              <p style="margin:4px 0 0;font-size:13px;color:#64748B;">Choose a screen or window to share</p>
+            </div>
+          \`;
+
+          const closeBtn = document.createElement('button');
+          closeBtn.style.cssText = 'background:#1C2433;border:none;color:#94A3B8;width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all 0.15s;';
+          closeBtn.innerHTML = '✕';
+          closeBtn.onmouseenter = () => { closeBtn.style.background = '#222C3D'; closeBtn.style.color = '#E2E8F0'; };
+          closeBtn.onmouseleave = () => { closeBtn.style.background = '#1C2433'; closeBtn.style.color = '#94A3B8'; };
+          closeBtn.onclick = () => { overlay.remove(); style.remove(); resolve(null); };
+          header.appendChild(closeBtn);
+          modal.appendChild(header);
+
+          // Scrollable area
+          const scrollArea = document.createElement('div');
+          scrollArea.className = 'recoil-picker-scrollarea';
+
+          // Screens section
+          if (screens.length > 0) {
+            const screenLabel = document.createElement('div');
+            screenLabel.className = 'recoil-section-label';
+            screenLabel.textContent = 'Screens';
+            scrollArea.appendChild(screenLabel);
+
+            const screenGrid = document.createElement('div');
+            screenGrid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;';
+            screens.forEach(s => {
+              const card = document.createElement('div');
+              card.className = 'recoil-picker-card';
+              card.innerHTML = \`
+                <img src="\${s.thumbnail}" alt="\${s.name}" />
+                <div class="label">
+                  <span>🖥️ \${s.name}</span>
+                </div>
+              \`;
+              card.onclick = () => { overlay.remove(); style.remove(); resolve(s.id); };
+              screenGrid.appendChild(card);
+            });
+            scrollArea.appendChild(screenGrid);
+          }
+
+          // Windows section
+          if (windows.length > 0) {
+            const windowLabel = document.createElement('div');
+            windowLabel.className = 'recoil-section-label';
+            windowLabel.textContent = 'Application Windows';
+            scrollArea.appendChild(windowLabel);
+
+            const windowGrid = document.createElement('div');
+            windowGrid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;';
+            windows.forEach(s => {
+              const card = document.createElement('div');
+              card.className = 'recoil-picker-card';
+              const iconHtml = s.appIcon ? \`<img class="icon" src="\${s.appIcon}" />\` : '';
+              card.innerHTML = \`
+                <img src="\${s.thumbnail}" alt="\${s.name}" />
+                <div class="label">
+                  \${iconHtml}
+                  <span>\${s.name}</span>
+                </div>
+              \`;
+              card.onclick = () => { overlay.remove(); style.remove(); resolve(s.id); };
+              windowGrid.appendChild(card);
+            });
+            scrollArea.appendChild(windowGrid);
+          }
+
+          modal.appendChild(scrollArea);
+
+          // Footer with cancel button
+          const footer = document.createElement('div');
+          footer.style.cssText = 'display:flex;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid #1E293B;';
+          const cancelBtn = document.createElement('button');
+          cancelBtn.style.cssText = 'background:#1C2433;border:1px solid #1E293B;color:#94A3B8;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;transition:all 0.15s;';
+          cancelBtn.textContent = 'Cancel';
+          cancelBtn.onmouseenter = () => { cancelBtn.style.background = '#222C3D'; cancelBtn.style.color = '#E2E8F0'; };
+          cancelBtn.onmouseleave = () => { cancelBtn.style.background = '#1C2433'; cancelBtn.style.color = '#94A3B8'; };
+          cancelBtn.onclick = () => { overlay.remove(); style.remove(); resolve(null); };
+          footer.appendChild(cancelBtn);
+          modal.appendChild(footer);
+
+          overlay.appendChild(modal);
+
+          // Click outside to cancel
+          overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) { overlay.remove(); style.remove(); resolve(null); }
+          });
+
+          // Escape to cancel
+          const escHandler = (e) => {
+            if (e.key === 'Escape') { overlay.remove(); style.remove(); resolve(null); document.removeEventListener('keydown', escHandler); }
+          };
+          document.addEventListener('keydown', escHandler);
+
+          document.body.appendChild(overlay);
+        });
+      `);
+
+      if (!selectedId) {
+        callback({});
+        return;
+      }
+
+      const selectedSource = sources.find(s => s.id === selectedId);
+      if (selectedSource) {
+        callback({ video: selectedSource, audio: 'loopback' });
+      } else {
+        callback({});
+      }
+    } catch (err) {
+      console.error('[ScreenShare] Error in display media handler:', err);
+      callback({});
+    }
+  });
+
+  // ── Permission Request Handler ────────────────────────────
+  // Allow media permissions (camera, microphone, screen) from our domain
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    const url = webContents.getURL();
+    const allowedPermissions = ['media', 'display-capture', 'mediaKeySystem', 'notifications'];
+    if (url.includes(APP_DOMAIN) && allowedPermissions.includes(permission)) {
+      callback(true);
+    } else {
+      callback(false);
+    }
   });
 
   // ── File Download Handling ────────────────────────────────

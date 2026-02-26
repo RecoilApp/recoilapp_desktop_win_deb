@@ -1,4 +1,37 @@
 {
+  "0.1.49": [
+    "Double-click your own messages to edit them (double-click others' messages to reply)",
+    "Message edit history — click the (edited) tag on any message to see all previous versions with timestamps",
+    "Edit history works for both channel messages and DMs",
+    "Clickable timestamps — click any message timestamp to copy a direct link to that message"
+  ],
+  "0.1.48": [
+    "Fixed Copy Image — images now reliably copy to clipboard using Electron's native clipboard API",
+    "Spelling suggestions now show word corrections (similarly-spelled words) instead of synonyms",
+    "Suggestions section uses Datamuse spell-match API for accurate corrections (up to 5)"
+  ],
+  "0.1.47": [
+    "Active spelling suggestions — right-click a misspelled word to see corrections (Electron spellcheck)",
+    "Thesaurus powered by Datamuse — right-click any word and expand Synonyms to find alternative words",
+    "Add to Dictionary — teach the spellchecker new words from the context menu",
+    "Enhanced context menu design with sections for spelling, synonyms, and tools"
+  ],
+  "0.1.46": [
+    "Redesigned screen share picker — beautiful in-app overlay with thumbnails instead of ugly system dialog",
+    "Screen/window picker shows source previews, app icons, and categorized sections",
+    "Fixed screen share audio — system audio loopback now captured alongside video",
+    "Fixed voice settings not applying — input/output volume, noise suppression, echo cancellation keys were mismatched",
+    "Output volume now correctly reads from settings (was silently defaulting to 100%)"
+  ],
+  "0.1.45": [
+    "Fixed expanded video layout — panel now adapts to viewport height instead of fixed 300px",
+    "Video streams use object-contain for proper aspect ratio without cropping",
+    "Fixed voice settings not applying — noise suppression, echo cancellation, and auto gain toggles now work correctly",
+    "Added Noise Gate filter — silences keyboard clicks and background hum when you're not speaking",
+    "Noise gate sensitivity slider in Voice & Video settings for fine-tuning",
+    "Fixed stale voice call error after app restart — orphaned calls are now properly cleaned up",
+    "DM calls auto-end when one participant disconnects (no more ghost calls)"
+  ],
   "0.1.42": [
     "Fixed broken video preview thumbnail when selecting a video before sending",
     "Video thumbnails now show a proper frame capture with play icon overlay",

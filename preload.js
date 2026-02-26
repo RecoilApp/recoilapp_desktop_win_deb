@@ -62,4 +62,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('game-exited', () => callback());
     return () => ipcRenderer.removeAllListeners('game-exited');
   },
+
+  // Spellcheck
+  onContextMenuParams: (callback) => {
+    ipcRenderer.on('context-menu-params', (event, data) => callback(data));
+    return () => ipcRenderer.removeAllListeners('context-menu-params');
+  },
+  replaceMisspelling: (word) => ipcRenderer.invoke('replace-misspelling', word),
+  addToDictionary: (word) => ipcRenderer.invoke('add-to-dictionary', word),
+
+  // Clipboard
+  copyImageToClipboard: (imageUrl) => ipcRenderer.invoke('copy-image-to-clipboard', imageUrl),
 });

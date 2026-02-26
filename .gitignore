@@ -3,3 +3,12 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Code signing certificates — NEVER commit these
+signing/.env
+signing/*.pfx
+signing/*.p12
+signing/*.pem
+signing/*.key
+signing/*.cer
+signing/*.crt

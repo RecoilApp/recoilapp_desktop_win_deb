@@ -1,6 +1,6 @@
 {
   "name": "recoilapp-desktop",
-  "version": "0.1.42",
+  "version": "0.1.49",
   "description": "RecoilApp Desktop — Real-Time Messaging Platform",
   "homepage": "https://recoilapp.com",
   "main": "main.js",
@@ -20,6 +20,7 @@
   "build": {
     "appId": "com.recoilapp.desktop",
     "productName": "RecoilApp",
+    "afterSign": "./afterSign.js",
     "directories": {
       "output": "../compiled_applications"
     },
