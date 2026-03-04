@@ -33,6 +33,14 @@ try {
   console.error('Failed to load game-detector module:', err.message);
 }
 
+// ── Resource Monitor ───────────────────────────────────────
+let resourceMonitor = null;
+try {
+  resourceMonitor = require('./resource-monitor');
+} catch (err) {
+  console.error('Failed to load resource-monitor module:', err.message);
+}
+
 // ── Settings Persistence ───────────────────────────────────
 const SETTINGS_FILE = path.join(app.getPath('userData'), 'desktop-settings.json');
 const DEFAULT_KEYBINDS = {
@@ -402,6 +410,42 @@ function registerIPC() {
       return { success: false, error: err.message };
     }
   });
+
+  // ── Resource Monitor IPC ─────────────────────────────────
+  ipcMain.handle('get-resource-snapshot', () => {
+    if (!resourceMonitor) return { error: 'Resource monitor unavailable' };
+    return resourceMonitor.getCurrentSnapshot();
+  });
+
+  ipcMain.handle('get-resource-report', () => {
+    if (!resourceMonitor) return { error: 'Resource monitor unavailable' };
+    return resourceMonitor.getCurrentReport();
+  });
+
+  ipcMain.handle('get-resource-summary', () => {
+    if (!resourceMonitor) return { error: 'Resource monitor unavailable' };
+    return resourceMonitor.getUsageSummary();
+  });
+
+  ipcMain.handle('list-resource-reports', () => {
+    if (!resourceMonitor) return [];
+    return resourceMonitor.listReportFiles();
+  });
+
+  ipcMain.handle('read-resource-report', (event, filename) => {
+    if (!resourceMonitor) return null;
+    return resourceMonitor.readReportFile(filename);
+  });
+
+  ipcMain.handle('get-resource-report-dir', () => {
+    if (!resourceMonitor) return null;
+    return resourceMonitor.getReportDir();
+  });
+
+  ipcMain.handle('force-gc', () => {
+    if (!resourceMonitor) return { error: 'Resource monitor unavailable' };
+    return resourceMonitor.forceGC();
+  });
 }
 
 // ── Create Main Window ─────────────────────────────────────
@@ -730,9 +774,19 @@ function getIconPath() {
 
 // ── App Lifecycle ──────────────────────────────────────────
 app.whenReady().then(() => {
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({ responseHeaders: details.responseHeaders });
-  });
+  // ── Periodic session cache management ────────────────────
+  // Clear stale cache data every 30 minutes to prevent unbounded growth
+  const CACHE_CLEAR_INTERVAL = 30 * 60 * 1000;
+  setInterval(() => {
+    try {
+      if (session.defaultSession) {
+        session.defaultSession.clearCache().catch(() => {});
+        session.defaultSession.clearCodeCaches({}).catch(() => {});
+      }
+    } catch (err) {
+      console.error('Cache clear failed:', err.message);
+    }
+  }, CACHE_CLEAR_INTERVAL);
 
   // ── Screen Share / Display Media Handler ──────────────────
   // Electron requires explicit handling for getDisplayMedia().
@@ -922,20 +976,42 @@ app.whenReady().then(() => {
       }
     } catch (err) {
       console.error('[ScreenShare] Error in display media handler:', err);
+      // Clean up any leaked picker overlay/styles on error
+      try {
+        mainWindow?.webContents.executeJavaScript(`
+          const picker = document.getElementById('recoil-screen-picker');
+          if (picker) picker.remove();
+        `).catch(() => {});
+      } catch {}
       callback({});
     }
   });
 
   // ── Permission Request Handler ────────────────────────────
-  // Allow media permissions (camera, microphone, screen) from our domain
+  // Allow media permissions from our domain + embed sources (YouTube, Spotify, etc.)
+  const EMBED_DOMAINS = ['youtube.com', 'www.youtube.com', 'open.spotify.com', 'platform.twitter.com', 'player.vimeo.com', 'www.twitch.tv', 'clips.twitch.tv', 'www.tiktok.com', 'www.dailymotion.com', 'streamable.com', 'codepen.io', 'codesandbox.io'];
+
   session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
     const url = webContents.getURL();
-    const allowedPermissions = ['media', 'display-capture', 'mediaKeySystem', 'notifications'];
+    const allowedPermissions = ['media', 'display-capture', 'mediaKeySystem', 'notifications', 'fullscreen'];
+
+    // Allow permissions from our own domain
     if (url.includes(APP_DOMAIN) && allowedPermissions.includes(permission)) {
       callback(true);
-    } else {
-      callback(false);
+      return;
     }
+
+    // Allow media/fullscreen permissions from trusted embed domains (YouTube, Spotify, etc.)
+    const embedPermissions = ['media', 'fullscreen', 'mediaKeySystem'];
+    try {
+      const parsed = new URL(url);
+      if (EMBED_DOMAINS.some(d => parsed.hostname === d || parsed.hostname.endsWith('.' + d)) && embedPermissions.includes(permission)) {
+        callback(true);
+        return;
+      }
+    } catch {}
+
+    callback(false);
   });
 
   // ── File Download Handling ────────────────────────────────
@@ -981,6 +1057,15 @@ app.whenReady().then(() => {
   createWindow();
   createTray();
 
+  // Initialize resource monitor
+  if (resourceMonitor) {
+    try {
+      resourceMonitor.init();
+    } catch (err) {
+      console.error('Failed to initialize resource monitor:', err.message);
+    }
+  }
+
   // Apply saved auto-launch state
   setAutoLaunch(desktopSettings.runOnStartup);
 
@@ -1021,4 +1106,8 @@ app.on('activate', () => {
 
 app.on('before-quit', () => {
   app.isQuitting = true;
+  // Flush final resource report before exit
+  if (resourceMonitor) {
+    try { resourceMonitor.shutdown(); } catch {}
+  }
 });

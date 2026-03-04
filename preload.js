@@ -73,4 +73,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Clipboard
   copyImageToClipboard: (imageUrl) => ipcRenderer.invoke('copy-image-to-clipboard', imageUrl),
+
+  // Resource Monitor
+  getResourceSnapshot: () => ipcRenderer.invoke('get-resource-snapshot'),
+  getResourceReport: () => ipcRenderer.invoke('get-resource-report'),
+  getResourceSummary: () => ipcRenderer.invoke('get-resource-summary'),
+  listResourceReports: () => ipcRenderer.invoke('list-resource-reports'),
+  readResourceReport: (filename) => ipcRenderer.invoke('read-resource-report', filename),
+  getResourceReportDir: () => ipcRenderer.invoke('get-resource-report-dir'),
+  forceGC: () => ipcRenderer.invoke('force-gc'),
 });

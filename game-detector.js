@@ -478,6 +478,10 @@ function scanSteamGames() {
 
 // ── Process Scanning ────────────────────────────────────────
 
+// Reusable containers to reduce GC pressure from 10s polling
+const _sharedProcesses = new Set();
+const _sharedWindowTitles = new Map();
+
 /**
  * Parse a single line of CSV, handling quoted fields.
  */
@@ -524,14 +528,17 @@ function getRunningProcesses() {
       cmd = 'ps -eo comm=';
     }
 
-    exec(cmd, { maxBuffer: 1024 * 1024 * 10, timeout: 15000 }, (error, stdout) => {
+    exec(cmd, { maxBuffer: 512 * 1024, timeout: 10000 }, (error, stdout) => {
       if (error) {
         reject(error);
         return;
       }
 
-      const processes = new Set();
-      const windowTitles = new Map(); // procName → windowTitle
+      // Reuse shared objects to avoid GC pressure from frequent polling
+      _sharedProcesses.clear();
+      _sharedWindowTitles.clear();
+      const processes = _sharedProcesses;
+      const windowTitles = _sharedWindowTitles;
 
       const lines = stdout.split('\n');
       for (const line of lines) {

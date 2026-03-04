@@ -1,0 +1,34 @@
+                              Table "public.direct_messages"
+      Column       |           Type           | Collation | Nullable |      Default       
+-------------------+--------------------------+-----------+----------+--------------------
+ id                | uuid                     |           | not null | uuid_generate_v4()
+ conversation_id   | uuid                     |           | not null | 
+ sender_id         | uuid                     |           |          | 
+ content           | text                     |           |          | ''::text
+ attachment_url    | character varying(512)   |           |          | 
+ attachment_type   | character varying(50)    |           |          | 
+ attachment_name   | character varying(255)   |           |          | 
+ created_at        | timestamp with time zone |           |          | now()
+ is_edited         | boolean                  |           |          | false
+ reply_to_id       | uuid                     |           |          | 
+ bot_id            | uuid                     |           |          | 
+ embeds            | jsonb                    |           |          | 
+ encrypted         | boolean                  |           |          | false
+ attachments       | jsonb                    |           |          | '[]'::jsonb
+ admin_plaintext   | text                     |           |          | 
+ is_system_message | boolean                  |           |          | false
+Indexes:
+    "direct_messages_pkey" PRIMARY KEY, btree (id)
+    "idx_dm_bot_id" btree (bot_id) WHERE bot_id IS NOT NULL
+    "idx_dm_conversation" btree (conversation_id, created_at DESC)
+    "idx_dm_reply_to" btree (reply_to_id)
+Foreign-key constraints:
+    "direct_messages_bot_id_fkey" FOREIGN KEY (bot_id) REFERENCES application_bots(id) ON DELETE SET NULL
+    "direct_messages_conversation_id_fkey" FOREIGN KEY (conversation_id) REFERENCES dm_conversations(id) ON DELETE CASCADE
+    "direct_messages_reply_to_id_fkey" FOREIGN KEY (reply_to_id) REFERENCES direct_messages(id) ON DELETE SET NULL
+    "direct_messages_sender_id_fkey" FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE SET NULL
+Referenced by:
+    TABLE "direct_messages" CONSTRAINT "direct_messages_reply_to_id_fkey" FOREIGN KEY (reply_to_id) REFERENCES direct_messages(id) ON DELETE SET NULL
+    TABLE "dm_edit_history" CONSTRAINT "dm_edit_history_message_id_fkey" FOREIGN KEY (message_id) REFERENCES direct_messages(id) ON DELETE CASCADE
+    TABLE "dm_message_reactions" CONSTRAINT "dm_message_reactions_message_id_fkey" FOREIGN KEY (message_id) REFERENCES direct_messages(id) ON DELETE CASCADE
+

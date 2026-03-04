@@ -1,4 +1,53 @@
 {
+  "0.1.57": [
+    "Memory optimization — removed unnecessary network interceptor that created garbage on every request",
+    "Reduced game detector buffer from 10MB to 512KB and reuse process scanning objects to cut GC pressure",
+    "Added automatic session cache clearing every 30 minutes to prevent unbounded memory growth",
+    "Fixed screen picker style element leak on error paths",
+    "New Resource Monitor — captures detailed memory, CPU, V8 heap, and process metrics every 60 seconds",
+    "Resource reports saved to app data directory with automatic rotation (keeps ~2 days of history)",
+    "API exposed to renderer: live snapshots, full reports, usage summaries, report file listing, and on-demand GC"
+  ],
+  "0.1.55": [
+    "Fixed message edit not applying when pressing Enter — cursor was jumping on every keystroke due to inline ref re-rendering",
+    "Fixed DM message edits failing validation (schema required wrong route param)",
+    "Mobile push notifications via Firebase Cloud Messaging for Android/iOS",
+    "Push notifications for DMs and mentions when user is offline with custom notification sound",
+    "Automatic cleanup of invalid push notification tokens"
+  ],
+  "0.1.54": [
+    "Fixed message edit cursor — cursor now starts at end of text instead of beginning",
+    "Focus returns to send box after cancelling or saving an edit",
+    "Removed duplicate blue focus outline on message edit textarea",
+    "12 unique avatar decoration ring animations — Aurora, Fire, Ice, Lightning, Nature, Galaxy, Heart, Rainbow, Shadow, Golden, Cyber, Sakura",
+    "New rotating avatar toggle — Premium feature for continuous profile picture rotation"
+  ],
+  "0.1.53": [
+    "Fixed tiered file upload size limits — Free tier increased from 10 MB to 25 MB",
+    "Frontend now uses dynamic plan-based upload limit instead of hardcoded 10 MB"
+  ],
+  "0.1.52": [
+    "Orbs currency & shop system — earn virtual currency by messaging and reacting, 17 shop items across rarity tiers",
+    "Daily orb claims with streak counter and bonus multipliers",
+    "Comprehensive security hardening — user-aware rate limiting, schema-based input validation across all routes",
+    "Visual design improvements across auth pages, shop, sidebars, and server settings",
+    "Fixed user presence status not showing correctly in DM sidebar and profile sidebar",
+    "IndexNow integration for instant search engine indexing"
+  ],
+  "0.1.51": [
+    "DM Profile Sidebar — replaced generic members list in 1-on-1 DMs with full inline user profile panel",
+    "Shows banner, avatar with status and decoration, badges, device indicator, bio, activity, and friend status",
+    "Resizable sidebar width with real-time status updates"
+  ],
+  "0.1.50": [
+    "AutoMod settings panel — create and manage automod rules (keyword filter, spam detection, invite filter, caps filter)",
+    "Fixed voice call audio not working — AudioContext was stuck in suspended state",
+    "Email login verification made opt-in — 6-digit code disabled by default with toggle in settings",
+    "Fixed friend request button jumping on click and mobile approve buttons being invisible",
+    "GDPR/ePrivacy compliance — automated account purge, session cleanup, legal links, data rights portal",
+    "Windows code signing for .exe builds",
+    "Safe localStorage wrapper preventing QuotaExceededError crashes"
+  ],
   "0.1.49": [
     "Double-click your own messages to edit them (double-click others' messages to reply)",
     "Message edit history — click the (edited) tag on any message to see all previous versions with timestamps",
